@@ -6,7 +6,7 @@ module Sidekiq
       def call(worker_class, job, queue, redis_pool)
         method = job['at'] ? 'perform_in' : 'perform_async'
 
-        ActiveSupport::Notifications.instrument("#{worker_class.to_s}##{method}", job: job) do
+        ActiveSupport::Notifications.instrument('app.worker.enqueue', title: "#{worker_class.to_s}##{method}", job: job) do
           yield
         end
       end
